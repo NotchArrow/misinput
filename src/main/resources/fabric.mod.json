@@ -3,13 +3,13 @@
 	"id": "misinput",
 	"version": "${version}",
 	"name": "Misinput",
-	"description": "This is an example description! Tell everyone what your mod is about!",
+	"description": "Stop hitting your friends accidentally!",
 	"authors": [
 		"NotchArrow"
 	],
 	"contact": {
-		"homepage": "https://fabricmc.net/",
-		"sources": "https://github.com/FabricMC/fabric-example-mod"
+		"homepage": "https://modrinth.com/project/misinput",
+		"sources": "https://github.com/NotchArrow/misinput"
 	},
 	"license": "MIT",
 	"icon": "assets/misinput/icon.png",
