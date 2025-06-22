@@ -19,6 +19,9 @@
 			"com.notcharrow.misinput.Misinput"
 		]
 	},
+	"mixins": [
+		"misinput.mixins.json"
+	],
 	"depends": {
 		"fabricloader": ">=0.16.14",
 		"minecraft": "~1.21.6",
