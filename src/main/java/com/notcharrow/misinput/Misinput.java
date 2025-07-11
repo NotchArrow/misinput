@@ -71,7 +71,11 @@ public class Misinput implements ModInitializer {
 
 		StringBuilder output = new StringBuilder("Usernames: ");
 		for (String username: usernames) {
-			output.append(username).append(", ");
+			if (usernames.indexOf(username) == usernames.size() - 1) {
+				output.append(username);
+			} else {
+				output.append(username).append(", ");
+			}
 		}
 		if (client.player != null) {
 			client.player.sendMessage(Text.of(String.valueOf(output)), false);
