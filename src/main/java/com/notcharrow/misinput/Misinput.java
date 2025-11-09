@@ -4,11 +4,13 @@ import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.notcharrow.misinput.config.ConfigManager;
 import com.notcharrow.misinput.helper.SuggestionBuilder;
+import com.notcharrow.misinput.helper.TextFormat;
 import net.fabricmc.api.ModInitializer;
 
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.text.Text;
 
 import java.util.Collections;
@@ -30,6 +32,18 @@ public class Misinput implements ModInitializer {
 				literal("misinput")
 					.then(literal("add")
 						.then(argument("username", StringArgumentType.string())
+								.suggests((context, builder) -> {
+									MinecraftClient client = MinecraftClient.getInstance();
+									if (client.world != null) {
+										for (PlayerEntity player : client.world.getPlayers()) {
+											String name = player.getName().getString();
+											if (name.toLowerCase().startsWith(builder.getRemainingLowerCase())) {
+												builder.suggest(name);
+											}
+										}
+									}
+									return builder.buildFuture();
+								})
 							.executes(Misinput::addUsername)))
 					.then(literal("remove")
 						.then(argument("username", StringArgumentType.string())
@@ -43,11 +57,11 @@ public class Misinput implements ModInitializer {
 
 	private static int addUsername(CommandContext<FabricClientCommandSource> context) {
 		String username = StringArgumentType.getString(context, "username");
-		ConfigManager.config.usernames.add(username.toLowerCase());
+		ConfigManager.config.usernames.add(username);
 		ConfigManager.saveConfig();
 
 		if (client.player != null) {
-			client.player.sendMessage(Text.of("Username: " + username + " added."), false);
+			client.player.sendMessage(TextFormat.styledText("Username: " + username + " added."), false);
 		}
 
 		return 1;
@@ -55,12 +69,19 @@ public class Misinput implements ModInitializer {
 
 	private static int removeUsername(CommandContext<FabricClientCommandSource> context) {
 		String username = StringArgumentType.getString(context, "username");
-		ConfigManager.config.usernames.remove(username.toLowerCase());
-		ConfigManager.saveConfig();
+		if (ConfigManager.config.usernames.contains(username)) {
+			ConfigManager.config.usernames.remove(username);
+			ConfigManager.saveConfig();
 
-		if (client.player != null) {
-			client.player.sendMessage(Text.of("Username: " + username + " removed."), false);
+			if (client.player != null) {
+				client.player.sendMessage(TextFormat.styledText("Username: " + username + " removed."), false);
+			}
+		} else {
+			if (client.player != null) {
+				client.player.sendMessage(TextFormat.styledText("Username: " + username + " not found."), false);
+			}
 		}
+
 
 		return 1;
 	}
@@ -78,7 +99,7 @@ public class Misinput implements ModInitializer {
 			}
 		}
 		if (client.player != null) {
-			client.player.sendMessage(Text.of(String.valueOf(output)), false);
+			client.player.sendMessage(TextFormat.styledText(String.valueOf(output)), false);
 		}
 
 		return 1;

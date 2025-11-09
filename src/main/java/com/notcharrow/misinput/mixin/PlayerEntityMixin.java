@@ -19,10 +19,13 @@ public class PlayerEntityMixin {
 		if (target instanceof PlayerEntity) {
 			String username = target.getName().getString().toLowerCase();
 			List<String> usernames = ConfigManager.config.usernames;
-			if (usernames.contains(username)) {
-				PlayerEntity player = (PlayerEntity) (Object) this;
-				player.playSound(SoundEvents.BLOCK_ANVIL_PLACE, 0.5f, 1.0f);
-				ci.cancel();
+			for (String user: usernames) {
+				if (user.toLowerCase().equals(username)) {
+					PlayerEntity player = (PlayerEntity) (Object) this;
+					player.playSound(SoundEvents.BLOCK_ANVIL_PLACE, 0.5f, 1.0f);
+					ci.cancel();
+					break;
+				}
 			}
 		}
 	}
