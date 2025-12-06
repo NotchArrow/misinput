@@ -5,13 +5,12 @@ import com.mojang.brigadier.context.CommandContext;
 import com.notcharrow.misinput.config.ConfigManager;
 import com.notcharrow.misinput.helper.SuggestionBuilder;
 import com.notcharrow.misinput.helper.TextFormat;
-import net.fabricmc.api.ModInitializer;
+import net.fabricmc.api.ClientModInitializer;
 
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.text.Text;
 
 import java.util.Collections;
 import java.util.List;
@@ -19,11 +18,11 @@ import java.util.List;
 import static net.fabricmc.fabric.api.client.command.v2.ClientCommandManager.argument;
 import static net.fabricmc.fabric.api.client.command.v2.ClientCommandManager.literal;
 
-public class Misinput implements ModInitializer {
+public class Misinput implements ClientModInitializer {
 	private static final MinecraftClient client = MinecraftClient.getInstance();
 
 	@Override
-	public void onInitialize() {
+	public void onInitializeClient() {
 		ConfigManager.loadConfig();
 
 		ClientCommandRegistrationCallback.EVENT.register((dispatcher,

@@ -15,7 +15,7 @@
 	"icon": "assets/misinput/icon.png",
 	"environment": "*",
 	"entrypoints": {
-		"main": [
+		"client": [
 			"com.notcharrow.misinput.Misinput"
 		]
 	},
